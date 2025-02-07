@@ -45,7 +45,7 @@ pub fn thunk() {
         "VC_LTL",
         "VC_LTL_URL",
         &format!(
-            "https://github.com/Chuyu-Team/VC-LTL5/releases/download/v{}/VC-LTL-{}-Binary.7z",
+            "https://github.com/Chuyu-Team/VC-LTL5/releases/download/v{}/VC-LTL-Binary.7z",
             VC_LTL_VERSION, VC_LTL_VERSION
         ),
         &out_dir,
