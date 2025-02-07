@@ -86,8 +86,8 @@ pub fn thunk() {
         "YY_THUNKS",
         "YY_THUNKS_URL",
         &format!(
-            "https://github.com/Chuyu-Team/YY-Thunks/releases/download/v{}/YY-Thunks-{}-Objs.zip",
-            YY_THUNKS_VERSION, YY_THUNKS_VERSION
+            "https://github.com/Chuyu-Team/YY-Thunks/releases/download/v{}/YY-Thunks-Objs.zip",
+            YY_THUNKS_VERSION
         ),
         &out_dir,
         &format!("YY-Thunks-{}", YY_THUNKS_VERSION),
