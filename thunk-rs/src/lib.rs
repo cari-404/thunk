@@ -2,8 +2,8 @@
 
 use std::{env, path::PathBuf, process::Command};
 
-const VC_LTL_VERSION: &'static str = "5.2.1-Beta4";
-const YY_THUNKS_VERSION: &'static str = "1.1.6-Beta5";
+const VC_LTL_VERSION: &'static str = "5.2.1";
+const YY_THUNKS_VERSION: &'static str = "1.1.6";
 
 /// This function should be call in build.rs.
 pub fn thunk() {
