@@ -7,7 +7,6 @@ const YY_THUNKS_VERSION: &'static str = "1.1.8";
 
 /// This function should be call in build.rs.
 pub fn thunk() {
-    println!("cargo::warning=test??");
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_env = env::var("CARGO_CFG_TARGET_ENV").unwrap();
 
@@ -28,7 +27,6 @@ pub fn thunk() {
             "5.2.3790.0"
         }
     } else if cfg!(feature = "vista") || cfg!(feature = "win7") {
-        println!("cargo::warning=vista / 7 selected");
         "6.0.6000.0"
     } else if cfg!(feature = "win8") {
         "6.2.9200.0"
