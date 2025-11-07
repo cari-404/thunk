@@ -20,26 +20,18 @@ pub fn thunk() {
 
     // Enable VC-LTL5
     let vc_ltl_arch = if target_arch == "x86" { "Win32" } else { "x64" };
-    let vc_ltl_platform = if cfg!(feature = "xp") {
-        if vc_ltl_arch == "Win32" {
-            "5.1.2600.0"
-        } else {
-            "5.2.3790.0"
+    let vc_ltl_platform = match (cfg!(feature = "xp"), vc_ltl_arch) {
+        (true, "Win32") => "5.1.2600.0",
+        (true, _)       => "5.2.3790.0",
+        _ if cfg!(feature = "vista") || cfg!(feature = "win7") => "6.0.6000.0",
+        _ if cfg!(feature = "win8") => "6.2.9200.0",
+        _ if cfg!(feature = "win10_10240") => "10.0.10240.0",
+        _ if cfg!(feature = "win10_19041") => "10.0.19041.0",
+        _ if cfg!(feature = "vc_ltl_only") => "6.0.6000.0",
+        _ => {
+            println!("cargo::warning=VC-LTL5 Skipped: Nothing to do!");
+            return;
         }
-    } else if cfg!(feature = "vista") || cfg!(feature = "win7") {
-        println!("vista / 7 selected");
-        "6.0.6000.0"
-    } else if cfg!(feature = "win8") {
-        "6.2.9200.0"
-    } else if cfg!(feature = "win10_10240") {
-        "10.0.10240.0"
-    } else if cfg!(feature = "win10_19041") {
-        "10.0.19041.0"
-    } else if cfg!(feature = "vc_ltl_only") {
-        "6.0.6000.0"
-    } else {
-        println!("cargo::warning=VC-LTL5 Skipped: Nothing to do!");
-        return;
     };
 
     let vc_ltl = get_or_download(
