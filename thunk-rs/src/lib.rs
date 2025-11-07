@@ -27,7 +27,7 @@ pub fn thunk() {
             "5.2.3790.0"
         }
     } else if cfg!(feature = "vista") || cfg!(feature = "win7") {
-        println!("vista / 7 selected")
+        println!("vista / 7 selected");
         "6.0.6000.0"
     } else if cfg!(feature = "win8") {
         "6.2.9200.0"
