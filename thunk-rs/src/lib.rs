@@ -117,6 +117,16 @@ pub fn thunk() {
         } else {
             ",5.02"
         }
+    } else if  cfg!(feature = "vista") {
+        ",6.00"
+    } else if  cfg!(feature = "win7") {
+        ",6.01"
+    } else if  cfg!(feature = "win8") {
+        ",6.02"
+    } else if cfg!(feature = "win10_10240") {
+        ",10.00"
+    } else if cfg!(feature = "win10_19041") {
+        ",10.00"
     } else {
         ""
     };
