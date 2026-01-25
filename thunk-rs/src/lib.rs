@@ -19,13 +19,15 @@ pub fn thunk() {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     // Enable VC-LTL5
-    if cfg!(feature != "yy_thunk_only") {
+    if cfg!(not(feature = "yy_thunk_only")) {
         let vc_ltl_arch = if target_arch == "x86" { 
             "Win32"
         } else if target_arch == "x86_64"{ 
             "x64"
         } else if target_arch == "aarch64"{
             "ARM64"
+        } else {
+            "UNKNOWN"
         };
         let vc_ltl_platform = if cfg!(feature = "xp") {
             if vc_ltl_arch == "Win32" {
