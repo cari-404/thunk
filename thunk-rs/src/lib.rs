@@ -19,53 +19,65 @@ pub fn thunk() {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     // Enable VC-LTL5
-    let vc_ltl_arch = if target_arch == "x86" { "Win32" } else { "x64" };
-    let vc_ltl_platform = if cfg!(feature = "xp") {
-        if vc_ltl_arch == "Win32" {
-            "5.1.2600.0"
+    if cfg!(feature != "yy_thunk_only") {
+        let vc_ltl_arch = if target_arch == "x86" { 
+            "Win32"
+        } else if target_arch == "x86_64"{ 
+            "x64"
+        } else if target_arch == "aarch64"{
+            "ARM64"
+        };
+        let vc_ltl_platform = if cfg!(feature = "xp") {
+            if vc_ltl_arch == "Win32" {
+                "5.1.2600.0"
+            } else {
+                "5.2.3790.0"
+            }
+        } else if cfg!(feature = "vista") || cfg!(feature = "win7") {
+            "6.0.6000.0"
+        } else if cfg!(feature = "win8") {
+            "6.2.9200.0"
+        } else if cfg!(feature = "win10_10240") {
+            "10.0.10240.0"
+        } else if cfg!(feature = "win10_19041") {
+            "10.0.19041.0"
+        } else if cfg!(feature = "vc_ltl_only") {
+            "6.0.6000.0"
         } else {
-            "5.2.3790.0"
-        }
-    } else if cfg!(feature = "vista") || cfg!(feature = "win7") {
-        "6.0.6000.0"
-    } else if cfg!(feature = "win8") {
-        "6.2.9200.0"
-    } else if cfg!(feature = "win10_10240") {
-        "10.0.10240.0"
-    } else if cfg!(feature = "win10_19041") {
-        "10.0.19041.0"
-    } else if cfg!(feature = "vc_ltl_only") {
-        "6.0.6000.0"
-    } else {
-        println!("cargo::warning=VC-LTL5 Skipped: Nothing to do!");
-        return;
-    };
+            println!("cargo::warning=VC-LTL5 Skipped: Nothing to do!");
+            return;
+        };
 
-    let vc_ltl = get_or_download(
-        "VC_LTL",
-        "VC_LTL_URL",
-        &format!(
-            "https://github.com/Chuyu-Team/VC-LTL5/releases/download/v{}/VC-LTL-Binary.7z",
-            VC_LTL_VERSION
-        ),
-        &out_dir,
-        &format!("VC-LTL-{}", VC_LTL_VERSION),
-    );
+        let vc_ltl = get_or_download(
+            "VC_LTL",
+            "VC_LTL_URL",
+            &format!(
+                "https://github.com/Chuyu-Team/VC-LTL5/releases/download/v{}/VC-LTL-Binary.7z",
+                VC_LTL_VERSION
+            ),
+            &out_dir,
+            &format!("VC-LTL-{}", VC_LTL_VERSION),
+        );
 
-    let vc_ltl_path = vc_ltl.join(&format!(
-        "TargetPlatform/{}/lib/{}",
-        vc_ltl_platform, vc_ltl_arch
-    ));
+        let vc_ltl_path = vc_ltl.join(&format!(
+            "TargetPlatform/{}/lib/{}",
+            vc_ltl_platform, vc_ltl_arch
+        ));
 
-    println!("cargo::rustc-link-search={}", vc_ltl_path.to_string_lossy());
-    println!(
-        "cargo::warning=VC-LTL5 Enabled: {}({})",
-        vc_ltl_platform, vc_ltl_arch
-    );
+        println!("cargo::rustc-link-search={}", vc_ltl_path.to_string_lossy());
+        println!(
+            "cargo::warning=VC-LTL5 Enabled: {}({})",
+            vc_ltl_platform, vc_ltl_arch
+        );
+    }else{
+        println!("cargo::warning=VC-LTL5 Disabled!");
+    }
 
     // Enable YY-Thunks
     let yy_thunks_arch = if target_arch == "x86" { "x86" } else { "x64" };
-    let yy_thunks_platform = if cfg!(feature = "xp") {
+    let yy_thunks_platform = if cfg!(feature= "win2k") && target_arch == "x86" {
+        "Win2K"
+    }else if cfg!(feature = "xp") {
         "WinXP"
     } else if cfg!(feature = "vista") {
         "Vista"
