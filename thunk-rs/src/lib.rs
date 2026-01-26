@@ -126,7 +126,7 @@ pub fn thunk() {
 
     // Set subsystem to windows
     let os_version = if cfg!(feature = "win2k"){
-        ",5.00"
+        ",5.01"
     }else if cfg!(feature = "xp") {
         if target_arch == "x86" {
             ",5.01"
