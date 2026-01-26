@@ -83,7 +83,7 @@ pub fn thunk() {
     } else {
         "UNKNOWN"
     };
-    if yy_thunks_arch != "UNKNOWN" || cfg!(not(feature = "vc_ltl_only")) {
+    if yy_thunks_arch != "UNKNOWN" && cfg!(not(feature = "vc_ltl_only")) {
         let yy_thunks_platform = if cfg!(feature= "win2k") && target_arch == "x86" {
             "Win2K"
         }else if cfg!(feature = "xp") {
@@ -136,7 +136,7 @@ pub fn thunk() {
 
     // Set subsystem to windows
     let os_version = if cfg!(feature = "win2k"){
-        ",5.01"
+        ",5.00"
     }else if cfg!(feature = "xp") {
         if target_arch == "x86" {
             ",5.01"
