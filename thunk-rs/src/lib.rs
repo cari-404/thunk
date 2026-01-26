@@ -76,48 +76,58 @@ pub fn thunk() {
     }
 
     // Enable YY-Thunks
-    let yy_thunks_arch = if target_arch == "x86" { "x86" } else { "x64" };
-    let yy_thunks_platform = if cfg!(feature= "win2k") && target_arch == "x86" {
-        "Win2K"
-    }else if cfg!(feature = "xp") {
-        "WinXP"
-    } else if cfg!(feature = "vista") {
-        "Vista"
-    } else if cfg!(feature = "win7") {
-        "Win7"
-    } else if cfg!(feature = "win8") {
-        "Win8"
-    } else if cfg!(feature = "win10_10240") {
-        "Win10.0.10240"
-    } else if cfg!(feature = "win10_19041") {
-        "Win10.0.19041"
+    let yy_thunks_arch = if target_arch == "x86" { 
+        "x86" 
+    } else if target_arch ==  "x86_64" {
+        "x64" 
     } else {
-        println!("cargo::warning=YY-Thunks Skipped: Nothing to do!!");
-        return;
+        "UNKNOWN"
     };
+    if yy_thunks_arch != "UNKNOWN" || cfg!(not(feature = "vc_ltl_only")) {
+        let yy_thunks_platform = if cfg!(feature= "win2k") && target_arch == "x86" {
+            "Win2K"
+        }else if cfg!(feature = "xp") {
+            "WinXP"
+        } else if cfg!(feature = "vista") {
+            "Vista"
+        } else if cfg!(feature = "win7") {
+            "Win7"
+        } else if cfg!(feature = "win8") {
+            "Win8"
+        } else if cfg!(feature = "win10_10240") {
+            "Win10.0.10240"
+        } else if cfg!(feature = "win10_19041") {
+            "Win10.0.19041"
+        } else {
+            println!("cargo::warning=YY-Thunks Skipped: Nothing to do!!");
+            return;
+        };
 
-    let yy_thunks = get_or_download(
-        "YY_THUNKS",
-        "YY_THUNKS_URL",
-        &format!(
-            "https://github.com/Chuyu-Team/YY-Thunks/releases/download/v{}/YY-Thunks-Objs.zip",
-            YY_THUNKS_VERSION
-        ),
-        &out_dir,
-        &format!("YY-Thunks-{}", YY_THUNKS_VERSION),
-    );
+        let yy_thunks = get_or_download(
+            "YY_THUNKS",
+            "YY_THUNKS_URL",
+            &format!(
+                "https://github.com/Chuyu-Team/YY-Thunks/releases/download/v{}/YY-Thunks-Objs.zip",
+                YY_THUNKS_VERSION
+            ),
+            &out_dir,
+            &format!("YY-Thunks-{}", YY_THUNKS_VERSION),
+        );
 
-    let yy_thunks = yy_thunks.join(format!(
-        "objs/{}/YY_Thunks_for_{}.obj",
-        yy_thunks_arch, yy_thunks_platform
-    ));
+        let yy_thunks = yy_thunks.join(format!(
+            "objs/{}/YY_Thunks_for_{}.obj",
+            yy_thunks_arch, yy_thunks_platform
+        ));
 
-    println!("cargo::rustc-link-arg={}", yy_thunks.to_string_lossy());
-    println!(
-        "cargo::warning=YY-Thunks Enabled: {}({})",
-        yy_thunks_platform, yy_thunks_arch
-    );
-
+        println!("cargo::rustc-link-arg={}", yy_thunks.to_string_lossy());
+        println!(
+            "cargo::warning=YY-Thunks Enabled: {}({})",
+            yy_thunks_platform, yy_thunks_arch
+        );
+    
+    } else {
+        println!("cargo::warning=YY_THUNKS Disabled!");
+    }
     // Return if is lib mode
     if cfg!(feature = "lib") {
         println!("cargo::warning=Lib Mode Enabled!");
